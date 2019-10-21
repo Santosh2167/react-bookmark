@@ -1,23 +1,27 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 
 class RegisterForm extends Component {
-    state = { 
-        email: "", 
-        password: "" 
+    state = {
+        email: "",
+        password: ""
     }
 
     onFormSubmit = (event) => {
         event.preventDefault();
         const { email, password } = this.state;
+        //console.log(this.state);
 
-        axios.post("http://localhost:3000/auth/register", { email, password})
-            .then(response => {
-                this.props.onRegisterFormSubmit(response.data.token, () => {
-                    this.props.history.push("/")
-                });
-            })
+        fetch("http://localhost:3000/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        })
+            .then(response => response.json())
+            .then(data => console.log(data))
             .catch(err => console.log(err));
     }
 
