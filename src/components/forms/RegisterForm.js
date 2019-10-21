@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 
 class RegisterForm extends Component {
     state = {
@@ -26,8 +26,15 @@ class RegisterForm extends Component {
 
         axios
             .post("http://localhost:3000/auth/register", { email, password })
-            .then(response => console.log(response))
+            .then(response => {
+                this.props.onRegisterFormSubmit((response.data.token), () => {
+                    this.props.history.push("/");
+                });
+            })
             .catch(err => console.log(err));
+
+        const { onRegisterFormSubmit } = this.props;
+        onRegisterFormSubmit("token");
     }
 
     onInputChange = (name, event) => {
@@ -35,8 +42,9 @@ class RegisterForm extends Component {
     }
 
     render() {
-        console.log(this.props);
+
         const { email, password } = this.state;
+        console.log("props>>", this.props);
 
         return (
             <form onSubmit={this.onFormSubmit}>
@@ -57,3 +65,4 @@ class RegisterForm extends Component {
 }
 
 export default withRouter(RegisterForm);
+// export default RegisterForm;

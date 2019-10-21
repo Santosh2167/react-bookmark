@@ -8,52 +8,90 @@ import BookmarksPage from "./pages/BookmarksPage";
 import LocalApi from "./../apis/local";
 import PrivateRoute from "./PrivateRoute";
 
-class App extends Component {
-    //state = { token: sessionStorage.getItem("token") }
-    constructor(props) {
-        super(props);
-        const token = sessionStorage.getItem("token");
-        this.state = { token };
+export default class App extends Component {
+    state = { token: sessionStorage.getItem("token") }
 
-        if (token) {
-            LocalApi.setAuthHeader(token);
-        }
-
-        LocalApi.handleTokenError(() => {
-            this.logout();
-        })
-    }
-
-    logout = () => {
-        sessionStorage.clear();
-        this.setState({ token: null });
-    }
-
-    onRegisterFormSubmit = (token, cb) => {
+    onRegisterFormSubmit = (token, CB) => {
         sessionStorage.setItem("token", token);
-        LocalApi.setAuthHeader(token);
-        this.setState({ token }, cb);
+        this.setState({ token }, CB);
     }
-    
+
+    componentDidUpdate() {
+        // console.log("token given>>>", this.state.token);
+    }
     render() {
         const { token } = this.state;
-
         return (
+
             <BrowserRouter>
                 <div>
-                    { token && <h4>User is logged in!</h4>}
+                    {token && <h1>Got the token,,User is logged in.</h1>}
                     <Switch>
                         <Route exact path="/" component={HomePage} />
-                        <Route exact path="/register" render={(props) => {
-                            return <RegisterPage {...props} onRegisterFormSubmit={this.onRegisterFormSubmit}  />
-                        }} />
-                        <PrivateRoute exact path="/bookmarks" token={token} component={BookmarksPage} />
+                        <Route
+                            exact
+                            path="/register"
+                            render={
+                                (props) => {
+                                    return <RegisterPage {...props} onRegisterFormSubmit={this.onRegisterFormSubmit} />
+                                }
+                            }
+                        // component={RegisterPage}
+                        />
                         <Route component={NotFoundPage} />
                     </Switch>
                 </div>
             </BrowserRouter>
-        );
+        )
     }
 }
 
-export default App;
+// class App extends Component {
+//     //state = { token: sessionStorage.getItem("token") }
+//     constructor(props) {
+//         super(props);
+//         const token = sessionStorage.getItem("token");
+//         this.state = { token };
+
+//         if (token) {
+//             LocalApi.setAuthHeader(token);
+//         }
+
+//         LocalApi.handleTokenError(() => {
+//             this.logout();
+//         })
+//     }
+
+//     logout = () => {
+//         sessionStorage.clear();
+//         this.setState({ token: null });
+//     }
+
+//     onRegisterFormSubmit = (token, cb) => {
+//         sessionStorage.setItem("token", token);
+//         LocalApi.setAuthHeader(token);
+//         this.setState({ token }, cb);
+//     }
+
+//     render() {
+//         const { token } = this.state;
+
+//         return (
+//             <BrowserRouter>
+//                 <div>
+//                     { token && <h4>User is logged in!</h4>}
+//                     <Switch>
+//                         <Route exact path="/" component={HomePage} />
+//                         <Route exact path="/register" render={(props) => {
+//                             return <RegisterPage {...props} onRegisterFormSubmit={this.onRegisterFormSubmit}  />
+//                         }} />
+//                         <PrivateRoute exact path="/bookmarks" token={token} component={BookmarksPage} />
+//                         <Route component={NotFoundPage} />
+//                     </Switch>
+//                 </div>
+//             </BrowserRouter>
+//         );
+//     }
+// }
+
+// export default App;
