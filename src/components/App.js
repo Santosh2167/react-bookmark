@@ -38,6 +38,7 @@ export default class App extends Component {
                             }
                         // component={RegisterPage}
                         />
+                        <Route exact path="/bookmarks" component={BookmarksPage} />
                         <Route component={NotFoundPage} />
                     </Switch>
                 </div>
