@@ -13,15 +13,20 @@ class RegisterForm extends Component {
         const { email, password } = this.state;
         //console.log(this.state);
 
-        fetch("http://localhost:3000/auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email, password })
-        })
-            .then(response => response.json())
-            .then(data => console.log(data))
+        // fetch("http://localhost:3000/auth/register", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify({ email, password })
+        // })
+        //     .then(response => response.json())
+        //     .then(data => console.log(data))
+        //     .catch(err => console.log(err));
+
+        axios
+            .post("http://localhost:3000/auth/register", { email, password })
+            .then(response => console.log(response))
             .catch(err => console.log(err));
     }
 
